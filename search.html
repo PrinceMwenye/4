@@ -22,7 +22,7 @@
 
             const xhr = new XMLHttpRequest();
             // TODO Change to server 2 
-            xhr.open('GET', `http://localhost:3000/api/definitions?word=${encodeURIComponent(word)}`, true);
+            xhr.open('GET', `https://arch-lab-5-s-aa447557da6b.herokuapp.com/api/definitions?word=${encodeURIComponent(word)}`, true);
 
             xhr.onload = function() {
                 if (this.status >= 200 && this.status < 400) {
