@@ -21,6 +21,7 @@
             }
 
             const xhr = new XMLHttpRequest();
+            // TODO Change to server 2 
             xhr.open('GET', `http://localhost:3000/api/definitions?word=${encodeURIComponent(word)}`, true);
 
             xhr.onload = function() {
