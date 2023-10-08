@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Word Definition</title>
+</head>
+<body>
+    <h2>Search Word Definition</h2>
+    <input type="text" id="searchWord" placeholder="Word to search">
+    <button onclick="searchDefinition()">Search</button>
+    <div id="result"></div>
+
+    <script>
+        function searchDefinition() {
+            const word = document.getElementById('searchWord').value.trim();
+
+            if (!word || /\d/.test(word)) {
+                alert('Invalid input. Please enter a valid word without numbers.');
+                return;
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `http://localhost:3000/api/definitions?word=${encodeURIComponent(word)}`, true);
+
+            xhr.onload = function() {
+                if (this.status >= 200 && this.status < 400) {
+                    const data = JSON.parse(this.response);
+                    if (data.definition) {
+                        document.getElementById('result').textContent = `${data.message}: ${data.definition}`;
+                    } else {
+                        document.getElementById('result').textContent = data.message;
+                    }
+                } else {
+                    document.getElementById('result').textContent = 'Error occurred!';
+                }
+            };
+            xhr.onerror = function() {
+                document.getElementById('result').textContent = 'Request failed!';
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

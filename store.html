@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Word Definition</title>
+</head>
+<body>
+    <h2>Store Word Definition</h2>
+    <input type="text" id="word" placeholder="Word">
+    <textarea id="definition" placeholder="Definition"></textarea>
+    <button onclick="storeDefinition()">Submit</button>
+    <div id="feedback"></div>
+
+    <script>
+        function storeDefinition() {
+            const word = document.getElementById('word').value.trim();
+            const definition = document.getElementById('definition').value.trim();
+
+            if (!word || !definition || /\d/.test(word) || /\d/.test(definition)) {
+                alert('Invalid input. Please enter a valid word and definition without numbers.');
+                return;
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:3000/api/definitions', true);
+
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (this.status >= 200 && this.status < 400) {
+                    const data = JSON.parse(this.response);
+                    document.getElementById('feedback').textContent = data.message;
+                } else {
+                    document.getElementById('feedback').textContent = 'Error occurred!';
+                }
+            };
+            xhr.onerror = function() {
+                document.getElementById('feedback').textContent = 'Request failed!';
+            };
+            xhr.send(`word=${encodeURIComponent(word)}&definition=${encodeURIComponent(definition)}`);
+        }
+    </script>
+</body>
+</html>
